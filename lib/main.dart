@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:material_color_utilities/material_color_utilities.dart';
 import 'dart:math';
 
 void main() {
   runApp(const MyApp());
+}
+
+extension Material3Palette on Color {
+  Color tone(int tone) {
+    assert(tone >= 0 && tone <= 100);
+    final color = Hct.fromInt(value);
+    final tonalPalette = TonalPalette.of(color.hue, color.chroma);
+    return Color(tonalPalette.get(tone));
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -130,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         Container(alignment: Alignment.center,
-          color: Colors.green,
+          color: Theme.of(context).colorScheme.background,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -143,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ), 
         ),
         Container(alignment: Alignment.center,
-          color: Colors.blue,
+          color: Theme.of(context).colorScheme.background,
           child: const Text('Paramètres'),
         ),
         ][currentPageIndex],
