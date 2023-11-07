@@ -1,9 +1,21 @@
+
 import 'package:flutter/material.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
-import 'dart:math';
+import 'package:json_theme/json_theme.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle;
+import 'screens/param.dart';
+import 'screens/home.dart';
+import 'screens/randomizer.dart';
 
-void main() {
-  runApp(const MyApp());
+
+
+Future<void> main() async  {
+  WidgetsFlutterBinding.ensureInitialized();
+  final themeStr = await rootBundle.loadString('assets/ThemeAlbum.json');
+  final themeJson = jsonDecode(themeStr);
+  final theme = ThemeDecoder.decodeThemeData(themeJson)!;
+  runApp(MyApp(theme : theme));
 }
 
 extension Material3Palette on Color {
@@ -15,35 +27,22 @@ extension Material3Palette on Color {
   }
 }
 
+
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+
+  final ThemeData theme;
+
+  const MyApp({Key? key, required this.theme}) : super(key: key);
+
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Application Flutter de Noufele',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Application flutter de Noufele'),
+      theme : theme,
+      home: const MyHomePage(title: 'Application Flutter de Noufele'),
     );
   }
 }
@@ -66,45 +65,20 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+Widget _getDrawerByItem(int pos ){
+  if(pos == 0){
+    return const Home();
+  }else if(pos == 1){
+    return const Randomizer();
+  }else if(pos == 2){
+    return const ParamBody();
+  }else{
+    return const Text("Error");
+  }
+}
+
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   int currentPageIndex = 0;
-  int random = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  void _decrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter--;
-    });
-  }
-
-  void _resetCounter() {
-    setState(() {
-      _counter = 0;
-    });
-  }
-
-  void _randomNumber() {
-    setState(() {
-      random = Random().nextInt(_counter);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,47 +91,9 @@ class _MyHomePageState extends State<MyHomePage> {
           // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
         ),
-        body: <Widget> [Container(alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Image.network(
-                  "https://midwestmsp.com/wp-content/uploads/2020/11/png-apple-logo-9736.png",
-                  height: 50.0,
-                  width: 50.0,
-                ),
-              ),
-              const Text(
-                'You have pushed the button this many times:',
-              ),
-              Text(
-                '$_counter',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-            ],
-          ),
-        ),
-        Container(alignment: Alignment.center,
-          color: Theme.of(context).colorScheme.background,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                '$random',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              TextButton(onPressed: _randomNumber , child : const Text('Générer un nombre aléatoire')),
-            ],
-          ), 
-        ),
-        Container(alignment: Alignment.center,
-          color: Theme.of(context).colorScheme.background,
-          child: const Text('Paramètres'),
-        ),
-        ][currentPageIndex],
+        body: _getDrawerByItem(currentPageIndex),
         bottomNavigationBar: BottomNavigationBar(
+          showUnselectedLabels: false,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
@@ -170,12 +106,12 @@ class _MyHomePageState extends State<MyHomePage> {
               backgroundColor: Colors.deepPurple,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: 'Paramètres',
+              icon: Icon(Icons.music_note),
+              label: 'Musique',
               backgroundColor: Colors.deepPurple,
             ),
           ],
-          selectedItemColor: Colors.deepPurple,
+          selectedItemColor: Colors.deepPurpleAccent,
           currentIndex: currentPageIndex,
           onTap: (int index) {
             setState(() {
@@ -183,33 +119,6 @@ class _MyHomePageState extends State<MyHomePage> {
             });
           },
         ),
-        floatingActionButton: Stack(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(left: 31),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: FloatingActionButton(
-                  onPressed: _decrementCounter,
-                  child: const Icon(Icons.exposure_minus_1),
-                ),
-              ),
-            ),
-            Align(
-                alignment: const Alignment(0.1, 1.0),
-                child: FloatingActionButton(
-                  onPressed: _resetCounter,
-                  child: const Text("Reset"),
-                )),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: FloatingActionButton(
-                  onPressed: _incrementCounter,
-                  child: const Icon(Icons.plus_one)),
-            ),
-          ],
-        )
-
         // This trailing comma makes auto-formatting nicer for build methods.
         );
   }
