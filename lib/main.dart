@@ -7,11 +7,18 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'screens/param.dart';
 import 'screens/home.dart';
 import 'screens/randomizer.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
+
+// future sleep function that takes a duration in milliseconds
+Future sleep(int milliseconds) {
+  return Future.delayed(Duration(milliseconds: milliseconds));
+}
 
 
 Future<void> main() async  {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   final themeStr = await rootBundle.loadString('assets/ThemeAlbum.json');
   final themeJson = jsonDecode(themeStr);
   final theme = ThemeDecoder.decodeThemeData(themeJson)!;
@@ -67,11 +74,11 @@ class MyHomePage extends StatefulWidget {
 
 Widget _getDrawerByItem(int pos ){
   if(pos == 0){
-    return const Home();
+    return const AlbumBody();
   }else if(pos == 1){
     return const Randomizer();
   }else if(pos == 2){
-    return const ParamBody();
+    return const Home();
   }else{
     return const Text("Error");
   }
@@ -79,8 +86,10 @@ Widget _getDrawerByItem(int pos ){
 
 class _MyHomePageState extends State<MyHomePage> {
   int currentPageIndex = 0;
+  
   @override
   Widget build(BuildContext context) {
+    FlutterNativeSplash.remove();
     return Scaffold(
         appBar: AppBar(
           // TRY THIS: Try changing the color here to a specific color (to
@@ -96,18 +105,18 @@ class _MyHomePageState extends State<MyHomePage> {
           showUnselectedLabels: false,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
+              icon: Icon(Icons.music_note),
+              label: 'Albums',
+              backgroundColor: Colors.deepPurple,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.add),
+              label: 'Choisir un nombre',
               backgroundColor: Colors.deepPurple,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.casino),
               label: 'Random',
-              backgroundColor: Colors.deepPurple,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.music_note),
-              label: 'Musique',
               backgroundColor: Colors.deepPurple,
             ),
           ],
