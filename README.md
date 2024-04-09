@@ -1,16 +1,15 @@
-# testapp
+# Flutter101
 
-A new Flutter project.
+Projet de test pour apprendre à utiliser Flutter.
 
-## Getting Started
+## Installation
 
-This project is a starting point for a Flutter application.
+Pour installer le projet, il suffit de cloner le dépôt et de lancer la commande `flutter run` dans le dossier du projet.
 
-A few resources to get you started if this is your first Flutter project:
+## Utilisation
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Le projet est un simple projet de test pour apprendre à utiliser Flutter. Il n'a pas d'utilité particulière.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Contribuer
+
+Les pull requests sont les bienvenues. Pour les changements importants, veuillez ouvrir une issue pour discuter de ce que vous aimeriez changer.
