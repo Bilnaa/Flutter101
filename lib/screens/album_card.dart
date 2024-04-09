@@ -24,6 +24,12 @@ class Album extends StatefulWidget {
   get getNomGroupe => nomGroupe;
   get getDescription => description;
 
+  Album.fromJson(Map<String, dynamic> json, {super.key})
+      : nomAlbum = json['nomAlbum'],
+        description = json['description'],
+        nomGroupe = json['nomGroupe'],
+        image = json['image'];
+
   @override
   _AlbumState createState() => _AlbumState();
 }
@@ -54,7 +60,8 @@ class _AlbumState extends State<Album> {
 
   @override
   Widget build(BuildContext context) {
-    String truncatedDescription = widget.description!.length > Album.maxDescriptionLength
+    String truncatedDescription = widget.description!.length >
+            Album.maxDescriptionLength
         ? "${widget.description!.substring(0, Album.maxDescriptionLength)}..."
         : widget.description!;
 
