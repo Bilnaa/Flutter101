@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 import 'package:json_theme/json_theme.dart';
@@ -7,22 +6,19 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'screens/param.dart';
 import 'screens/home.dart';
 import 'screens/randomizer.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-
 
 // future sleep function that takes a duration in milliseconds
 Future sleep(int milliseconds) {
   return Future.delayed(Duration(milliseconds: milliseconds));
 }
 
-
-Future<void> main() async  {
+Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   final themeStr = await rootBundle.loadString('assets/ThemeAlbum.json');
   final themeJson = jsonDecode(themeStr);
   final theme = ThemeDecoder.decodeThemeData(themeJson)!;
-  runApp(MyApp(theme : theme));
+  runApp(MyApp(theme: theme));
 }
 
 extension Material3Palette on Color {
@@ -34,13 +30,10 @@ extension Material3Palette on Color {
   }
 }
 
-
 class MyApp extends StatelessWidget {
-
   final ThemeData theme;
 
   const MyApp({Key? key, required this.theme}) : super(key: key);
-
 
   // This widget is the root of your application.
   @override
@@ -48,7 +41,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Application Flutter de Noufele',
       debugShowCheckedModeBanner: false,
-      theme : theme,
+      theme: theme,
       home: const MyHomePage(title: 'Application Flutter de Noufele'),
     );
   }
@@ -72,63 +65,63 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-Widget _getDrawerByItem(int pos ){
-  if(pos == 0){
+Widget _getDrawerByItem(int pos) {
+  if (pos == 0) {
     return const AlbumBody();
-  }else if(pos == 1){
+  } else if (pos == 1) {
     return const Randomizer();
-  }else if(pos == 2){
+  } else if (pos == 2) {
     return const Home();
-  }else{
+  } else {
     return const Text("Error");
   }
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   int currentPageIndex = 0;
-  
+
   @override
   Widget build(BuildContext context) {
-    FlutterNativeSplash.remove();
     return Scaffold(
-        appBar: AppBar(
-          // TRY THIS: Try changing the color here to a specific color (to
-          // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-          // change color while the other colors stay the same.
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: Text(widget.title),
-        ),
-        body: _getDrawerByItem(currentPageIndex),
-        bottomNavigationBar: BottomNavigationBar(
-          showUnselectedLabels: false,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.music_note),
-              label: 'Albums',
-              backgroundColor: Colors.deepPurple,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add),
-              label: 'Choisir un nombre',
-              backgroundColor: Colors.deepPurple,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.casino),
-              label: 'Random',
-              backgroundColor: Colors.deepPurple,
-            ),
-          ],
-          selectedItemColor: Colors.deepPurpleAccent,
-          currentIndex: currentPageIndex,
-          onTap: (int index) {
-            setState(() {
-              currentPageIndex = index;
-            });
-          },
-        ),
-        // This trailing comma makes auto-formatting nicer for build methods.
-        );
+      appBar: AppBar(
+        // TRY THIS: Try changing the color here to a specific color (to
+        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
+        // change color while the other colors stay the same.
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Text(widget.title),
+      ),
+      body: _getDrawerByItem(currentPageIndex),
+
+      bottomNavigationBar: BottomNavigationBar(
+        showUnselectedLabels: false,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.music_note),
+            label: 'Albums',
+            backgroundColor: Colors.deepPurple,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add),
+            label: 'Choisir un nombre',
+            backgroundColor: Colors.deepPurple,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.casino),
+            label: 'Random',
+            backgroundColor: Colors.deepPurple,
+          ),
+        ],
+        selectedItemColor: Colors.deepPurpleAccent,
+        currentIndex: currentPageIndex,
+        onTap: (int index) {
+          setState(() {
+            currentPageIndex = index;
+          });
+        },
+      ),
+      // This trailing comma makes auto-formatting nicer for build methods.
+    );
   }
 }
