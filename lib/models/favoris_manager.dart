@@ -1,4 +1,5 @@
 import '../screens/album_card.dart';
+import 'dart:convert';
 
 class FavorisManager {
   static final FavorisManager _instance = FavorisManager._internal();
@@ -26,7 +27,8 @@ class FavorisManager {
 
   static void remove(Album album) {
     // check if album is in favoris list with the title before removing it
-    _instance.favoris.removeWhere((element) => element.getNomAlbum == album.getNomAlbum);
+    _instance.favoris
+        .removeWhere((element) => element.getNomAlbum == album.getNomAlbum);
   }
 
   static bool isFavorited(Album album) {
@@ -36,5 +38,9 @@ class FavorisManager {
       }
     }
     return false;
+  }
+
+  static String exportToJson() {
+    return jsonEncode(_instance.favoris);
   }
 }
